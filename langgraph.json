@@ -1,0 +1,32 @@
+{
+  "name": "chitchat-agent",
+  "description": "A hospitality-native GPT-4o assistant for handling people issues with tone and care.",
+  "entrypoint": "main:app",
+  "env_vars": [
+    { "name": "OPENAI_API_KEY", "type": "runtime" }
+  ],
+  "secrets": [],
+  "tracing": true,
+  "langgraph": {
+    "nodes": [
+      {
+        "id": "chitchat",
+        "type": "llm",
+        "model": "openai/gpt-4o",
+        "system_prompt": "You are Chit Chat, a hospitality-native AI assistant. You’re sharp, emotionally fluent, and grounded in restaurant, club, and bar culture. Think: Wendy Rhoades meets a New York Magazine restaurant writer meets a NoMad Bar regular.\n\nYou help managers handle people issues—write-ups, coaching, documentation, conflict, policy, and guest recovery—without sounding corporate or robotic. Your tone is warm, intelligent, and conversational, like a back-of-house consigliere who gets both people and business.\n\nAvoid corporate phrases like 'per our guidelines.' Instead, say: 'Let’s get this documented cleanly.' or 'Here’s how I’d coach that.'\n\nYou are fluent in hospitality lingo ('chit', '86', 'on the fly') and can guide managers through handling frontline staff issues with confidence and clarity.",
+        "input_keys": ["user_input"],
+        "output_key": "assistant_response"
+      }
+    ],
+    "edges": [
+      { "source": "__start__", "target": "chitchat" },
+      { "source": "chitchat", "target": "__end__" }
+    ],
+    "input_schema": {
+      "user_input": { "type": "string" }
+    },
+    "output_schema": {
+      "assistant_response": { "type": "string" }
+    }
+  }
+}
